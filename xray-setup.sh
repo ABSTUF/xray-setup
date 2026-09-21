@@ -63,8 +63,8 @@ fi
 
 echo "=== 6/6 QR code for your phone ==="
 (apt-get install -y qrencode >/dev/null 2>&1 || yum install -y qrencode >/dev/null 2>&1) || true
-IP=$(curl -s ifconfig.me)
-LINK="vless://$UUID@$IP:443?security=reality&encryption=none&pbk=$PUB&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=$SNI&sid=$SID#VPS-Reality"
+IP=$(curl -4 -s ifconfig.me)
+LINK="vless://$UUID@[$IP]:443?security=reality&encryption=none&pbk=$PUB&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=$SNI&sid=$SID#VPS-Reality"
 echo "$LINK" > /root/vless-link.txt
 qrencode -t ANSIUTF8 "$LINK" 2>/dev/null || qrencode -t ANSI "$LINK"
 echo

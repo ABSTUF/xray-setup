@@ -7,8 +7,14 @@ echo "=== 2/6 Generating keys ==="
 cd /usr/local/etc/xray
 UUID=$(xray uuid)
 KEYS=$(xray x25519)
-PRIV=$(echo "$KEYS" | grep -i 'Private' | awk '{print $3}')
-PUB=$(echo "$KEYS" | grep -i 'Public' | awk '{print $3}')
+PRIV=$(echo "$KEYS" | grep -i 'Private' | awk '{print $NF}')
+PUB=$(echo "$KEYS" | grep -i 'Public' | awk '{print $NF}')
+if [ -z "$PRIV" ] || [ -z "$PUB" ]; then
+  echo "ERROR: empty Reality keys! Raw x25519 output:"
+  echo "$KEYS"
+  exit 1
+fi
+echo "--- Check: PRIV=${PRIV:0:8}... PUB=${PUB:0:8}... (must not be empty) ---"
 SID=$(openssl rand -hex 8)
 SNI=www.microsoft.com
 

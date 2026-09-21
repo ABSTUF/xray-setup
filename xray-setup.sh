@@ -16,7 +16,7 @@ if [ -z "$PRIV" ] || [ -z "$PUB" ]; then
 fi
 echo "--- Check: PRIV=${PRIV:0:8}... PUB=${PUB:0:8}... (must not be empty) ---"
 SID=$(openssl rand -hex 8)
-SNI=ya.ru
+SNI=www.microsoft.com
 
 echo "=== 3/6 Writing config ==="
 cat > config.json <<XEOF

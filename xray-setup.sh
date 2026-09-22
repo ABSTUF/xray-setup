@@ -9,13 +9,13 @@ UUID=$(xray uuid)
 KEYS=$(xray x25519)
 PRIV=$(echo "$KEYS" | grep -i 'Private' | awk '{print $NF}')
 PUB=$(echo "$KEYS" | grep -i 'Public' | awk '{print $NF}')
+SID=$(openssl rand -hex 8)
 if [ -z "$PRIV" ] || [ -z "$PUB" ]; then
   echo "ERROR: empty Reality keys! Raw x25519 output:"
   echo "$KEYS"
   exit 1
 fi
 echo "--- Check: PRIV=${PRIV:0:8}... PUB=${PUB:0:8}... (must not be empty) ---"
-SID=$(openssl rand -hex 8)
 SNI=www.microsoft.com
 
 echo "=== 3/6 Writing config ==="
@@ -64,7 +64,7 @@ fi
 echo "=== 6/6 QR code for your phone ==="
 (apt-get install -y qrencode >/dev/null 2>&1 || yum install -y qrencode >/dev/null 2>&1) || true
 IP=$(curl -4 -s ifconfig.me)
-LINK="vless://$UUID@[$IP]:443?security=reality&encryption=none&pbk=$PUB&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=$SNI&sid=$SID#VPS-Reality"
+LINK="vless://$UUID@$IP:443?security=reality&encryption=none&pbk=$PUB&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=$SNI&sid=$SID#VPS-Reality"
 echo "$LINK" > /root/vless-link.txt
 qrencode -t ANSIUTF8 "$LINK" 2>/dev/null || qrencode -t ANSI "$LINK"
 echo
